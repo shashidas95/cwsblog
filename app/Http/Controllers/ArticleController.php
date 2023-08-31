@@ -13,7 +13,7 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::with(['user', 'tags'])->latest()->simplePaginate();
-        return view('Article.index', compact('articles'));
+        return view('articles.index', compact('articles'));
     }
 
     /**
@@ -37,7 +37,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        return view('Article.show', compact('article'));
+        return view('articles.show', compact('article'));
     }
 
     /**

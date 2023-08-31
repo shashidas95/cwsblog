@@ -1,4 +1,4 @@
-@extends('Article.layouts.app')
+@extends('articles.layouts.app')
 
 @section('content')
     <div class="bg-dark py-40 space-y-2 xl:space-y-0 w-4/5 sm:w-2/5 mx-auto">
