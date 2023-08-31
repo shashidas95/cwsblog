@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
 use App\Models\Article;
+use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreArticleRequest;
 
 class ArticleController extends Controller
 {
@@ -21,15 +25,21 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        //
+
+        return view('articles.create', $this->getFormData() );
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreArticleRequest $request)
     {
-        //
+        $article = Article::create($request->validated() + [
+            'slug' => Str::slug($request->title),
+            'user_id' => auth()->id(),
+        ]);
+        $article->tags()->attach($request->tags);
+        return redirect(route('/articles.index'))->with('message', "Article created successfully");
     }
 
     /**
@@ -45,7 +55,7 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        //
+        return view('articles.edit', array_merge(compact('article'), $this->getFormData()));
     }
 
     /**
@@ -62,5 +72,11 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         //
+    }
+    public function getFormData()
+    {
+        $categories = Category::pluck('name', 'id');
+        $tags = Tag::pluck('name', 'id');
+        return  compact('catgories', 'tags');
     }
 }
